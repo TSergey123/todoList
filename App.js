@@ -19,10 +19,11 @@ export default function App() {
     setTask(null);
   };
 
+
   const completeTask = (index) => {
     let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy);
+      itemsCopy.splice(index, 1);
+      setTaskItems(itemsCopy);
   };
 
   const dublicateAll = (index) => {
@@ -32,11 +33,10 @@ export default function App() {
     ]);
   }
 
-  const renameTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    // setTaskItems(itemsCopy);
-  }
+   const removeAllTasks = () => {
+      let clearList = []
+      setTaskItems(clearList);
+  };
 
   return (
     <View style={styles.container}>
@@ -50,9 +50,7 @@ export default function App() {
           {taskItems.map((item, index) => {
             return (
               <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                <View >
-                  <Task text={item}/>
-                </View>
+                <Task text={item} />
               </TouchableOpacity>
 
             );
@@ -153,5 +151,5 @@ const styles = StyleSheet.create({
   icons: {
     width: 25,
     height: 25,
-  },
+  }
 });
