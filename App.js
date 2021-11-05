@@ -1,12 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Keyboard, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, TextInput, View, ScrollView } from "react-native";
-// import icon from "./components/icons/trashIcon.png";
 import Task from "./components/Task";
 
 const trashIcon = 'https://img.icons8.com/ios/96/000000/delete-trash.png';
 const copyIcon = 'https://img.icons8.com/ios/50/000000/copy.png';
-// import { useKeyboard } from 'react-native-community/hooks'
 
 export default function App() {
   // const keyboard = useKeyboard()
