@@ -6,7 +6,6 @@ const trashIcon = 'https://img.icons8.com/ios/96/000000/delete-trash.png';
 const copyIcon = 'https://img.icons8.com/ios/50/000000/copy.png';
 
 export default function App() {
-  // const keyboard = useKeyboard()
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
