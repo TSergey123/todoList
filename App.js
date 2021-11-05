@@ -1,24 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import {KeyBoard, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, TextInput, View, Touchable } from 'react-native';
-import Task from './components/Task';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { Keyboard, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, TextInput, View, ScrollView } from "react-native";
+// import icon from "./components/icons/trashIcon.png";
+import Task from "./components/Task";
+
+const trashIcon = 'https://img.icons8.com/ios/96/000000/delete-trash.png';
+const copyIcon = 'https://img.icons8.com/ios/50/000000/copy.png';
+// import { useKeyboard } from 'react-native-community/hooks'
 
 export default function App() {
+  // const keyboard = useKeyboard()
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
   const handleAddTask = () => {
-    // KeyBoard.dismiss();
-    setTaskItems([...taskItems, task])
+    Keyboard.dismiss();
+    setTaskItems([...taskItems, task]);
     setTask(null);
-  }
+  };
 
   const completeTask = (index) => {
-    let itemsCopy = [...taskItems]
+    let itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy)
+    setTaskItems(itemsCopy);
+  };
+
+  const dublicateAll = (index) => {
+    setTaskItems([
+      ...taskItems.slice(0, index),
+      ...taskItems.slice(index + 1)
+    ]);
   }
 
+  const renameTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1);
+    // setTaskItems(itemsCopy);
+  }
 
   return (
     <View style={styles.container}>
@@ -26,33 +44,42 @@ export default function App() {
 
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>Задачи на сегодня</Text>
-        <View style={styles.items}>
+        <ScrollView style={styles.items}>
           {/* {Tasks} */}
-          {
-            taskItems.map((item, index) => {
-              return (
-                <TouchableOpacity onPress={() => completeTask()}>
-                  <Task key={index} text={item} />
-                </TouchableOpacity>
-              )
-            }
-            )
-          }
-          {/* <Task text={'Task1'} />
-          <Task text={'Task2'} />
-          <Task text={'Task3'} /> */}
-        </View>
+
+          {taskItems.map((item, index) => {
+            return (
+              <TouchableOpacity key={index} onPress={() => completeTask(index)}>
+                <View >
+                  <Task text={item}/>
+                </View>
+              </TouchableOpacity>
+
+            );
+          })}
+        </ScrollView>
       </View>
 
       {/* Write a task */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.writeTaskWrapper}
-      >
-        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)}></TextInput>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.writeTaskWrapper}>
+        <TextInput style={styles.input} placeholder={"Write a task"} value={task} onChangeText={(text) => setTask(text)}></TextInput>
         <TouchableOpacity onPress={() => handleAddTask()}>
           <View style={styles.addWraper}>
             <Text style={styles.addText}>+</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => removeAllTasks()}>
+          <View style={styles.addWraper}>
+            <Text style={styles.addText}>
+              <Image style={styles.icons} source={{ uri: trashIcon }} />
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => dublicateAll()}>
+          <View style={styles.addWraper}>
+            <Text style={styles.addText}>
+              <Image style={styles.icons} source={{ uri: copyIcon }} />
+            </Text>
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -62,17 +89,25 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#E8EAED',
+    display: "flex",
+    backgroundColor: "#E8EAED",
+    flexDirection: "column",
+    height: "96%",
+    marginTop: 30,
   },
   tasksWrapper: {
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: "auto",
     paddingTop: 80,
     paddingHorizontal: 20,
+    height: "90%",
+    overflow: "scroll",
   },
 
   sectionTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   items: {
@@ -80,36 +115,43 @@ const styles = StyleSheet.create({
   },
 
   writeTaskWrapper: {
-    position: 'absolute',
-    bottom: 60,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: "auto",
+    marginBottom: 10,
   },
 
   input: {
     paddingVertical: 15,
     paddingHorizontal: 15,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     borderRadius: 60,
-    borderColor: '#C0C0C0',
+    borderColor: "#C0C0C0",
     borderWidth: 1,
     width: 250,
   },
 
   addWraper: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#FFF',
+    width: 45,
+    height: 45,
+    backgroundColor: "#FFF",
     borderRadius: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#C0C0C0',
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#C0C0C0",
     borderWidth: 1,
   },
 
   addText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
+  },
+
+  icons: {
+    width: 25,
+    height: 25,
   },
 });
